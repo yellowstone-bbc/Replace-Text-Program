@@ -1,0 +1,43 @@
+server:
+  port: ${SERVER_PORT} # Server Port 
+
+eureka:
+  instance:
+      instanceId: controller:${random.value}
+      ## this should not be enabled on production
+      leaseRenewalIntervalInSeconds: 1
+      leaseExpirationDurationInSeconds: 2
+  client:
+    serviceUrl:
+      defaultZone: ${server.ip}
+      eureka.client.healthcheck.enabled: true
+      lease:duration: 1
+      
+spring:
+  cloud:
+    config:
+      uri: 
+        - ${SPRING_CLOUD_CONFIG_URI} # Use the Cloud Server URL
+  application:
+    name: <<serviceName>> # Name should match artifactId of the Microservice
+    
+host:
+  name: ${<<serviceName>>.host.name}
+
+management:
+   endpoint:
+      refresh:
+       enabled: true  # EndPoint to enable Refresh of the Data
+      env:
+        enabled: true
+      restart:
+        enabled: true
+   endpoints:
+    web:
+      exposure:
+        include:
+        - env # To view env variables, Remove this End point later if not needed.
+        - refresh
+        - restart
+        - health
+        
